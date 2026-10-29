@@ -242,6 +242,7 @@ void Game::Enter_Characters(pair<string, string> selected,
     cout << "Hint: " << selected.second << '\n';
 
     Enter_Characters(selected, trials);
+    
 }
 
 // Game constructor
