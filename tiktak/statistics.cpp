@@ -59,9 +59,18 @@ void Statistics::clear_statistics() {
         return;
     }
 
+    int user_response;
+
+    cout << "Are You sure You want to clear Statistics?\n1. Yes\n2. No"<<endl;
+    cin >> user_response;
+    if (user_response == 1){
     outputFile.close();
 
     std::cout << "Statistics cleared successfully.\n";
+    }else{
+        cout << "Statistics are not cleared"<< endl;
+        
+    }
 }
 
 void Statistics::search_player_statistics(std::string playerName) {
