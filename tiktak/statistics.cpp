@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include "statistics.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -69,7 +70,7 @@ void Statistics::clear_statistics() {
     std::cout << "Statistics cleared successfully.\n";
     }else{
         cout << "Statistics are not cleared"<< endl;
-        
+
     }
 }
 
@@ -118,4 +119,99 @@ void Statistics::search_player_statistics(std::string playerName) {
     }
 
     inputFile.close();
+}
+
+void Statistics::statistics_menu() {
+
+    int choice;
+
+    do {
+
+        clearScreen();
+
+        std::cout << "\n========== STATISTICS MENU ==========\n";
+        std::cout << "1. See All Statistics\n";
+        std::cout << "2. Search User in Statistics\n";
+        std::cout << "3. Clear Statistics\n";
+        std::cout << "4. Return to Home\n";
+        std::cout << "=====================================\n";
+
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        // Check if input is a number
+        if (std::cin.fail()) {
+
+            std::cout << "\nInvalid input! Please enter a number.\n";
+
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+
+            std::cout << "Press Enter to continue...";
+            std::cin.get();
+
+            continue;
+        }
+
+        std::cin.ignore(10000, '\n');
+        if (choice < 1 || choice > 4) {
+
+            std::cout << "\nInvalid choice! Please enter a number between 1 and 4.\n";
+
+            std::cout << "Press Enter to continue...";
+            std::cin.get();
+
+            continue;
+        }
+
+        switch (choice) {
+
+            case 1:
+                read_statistics();
+
+                std::cout << "\nPress Enter to continue...";
+                std::cin.get();
+                break;
+
+            case 2: {
+                std::string playerName;
+
+                std::cout << "Enter player name: ";
+                std::getline(std::cin, playerName);
+
+                search_player_statistics(playerName);
+
+                std::cout << "\nPress Enter to continue...";
+                std::cin.get();
+                break;
+            }
+
+            case 3: {
+                char confirm;
+
+                std::cout << "Are you sure you want to clear all statistics? (y/n): ";
+                std::cin >> confirm;
+                std::cin.ignore(10000, '\n');
+
+                if (confirm == 'y' || confirm == 'Y') {
+
+                    clear_statistics();
+
+                } else {
+
+                    std::cout << "Operation cancelled.\n";
+                }
+
+                std::cout << "\nPress Enter to continue...";
+                std::cin.get();
+
+                break;
+            }
+
+            case 4:
+                std::cout << "Returning to Home...\n";
+                break;
+        }
+
+    } while (choice != 4);
 }
