@@ -1,8 +1,9 @@
 #include "Board.h"
+#include "statistics.h"
 #include <iostream>
 #include <string>
 using namespace std;
-
+Statistics stats;
 string enter_player_one()
 {
     string player;
@@ -40,7 +41,7 @@ string choose_first_player(string x, string y)
     }
 }
 
-int game()
+int Board:: game()
 {
     Board board;
     string player_one = enter_player_one();
@@ -83,6 +84,7 @@ int game()
         board.display();
         if (board.isDraw()){
             std::cout << "It's a draw!\n";
+            stats.add_statistics(player_one, player_two, "None");
         }
         else{
             char winner_char = board.winner();
@@ -93,11 +95,19 @@ int game()
                 winner = second_player;
             }
             std::cout << "Player " << winner << " wins!\n";
+           stats.add_statistics(player_one, player_two, winner);
         }
         std::cout << "Play again? (y/n): ";
         std::string answer;
         if (!std::getline(std::cin, answer))
             return 0;
-        again = answer == "y" || answer == "Y";
+        if(answer == "y" || answer == "Y"){
+        choose_first_player(player_one, player_two);
+        again = true;
+        }else{
+            return 0;
+        }
+
     }
+    return 1;
 }
