@@ -20,6 +20,7 @@ public:
 
 // This is for the menu for statistics section
     void statistics_menu();
+    int main();
 
 };
 

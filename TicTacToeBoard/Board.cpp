@@ -24,7 +24,9 @@ bool Board::isValidMove(int position) const {
 
 bool Board::makeMove(int position, char symbol) {
     symbol = static_cast<char>(std::toupper(static_cast<unsigned char>(symbol)));
-    if ((symbol != 'X' && symbol != 'O') || !isValidMove(position)) return false;
+    if ((symbol != 'X' && symbol != 'O') || !isValidMove(position)){ 
+        return false;
+    }
     cells_[position-1] = symbol;
     history_.push_back({position,symbol});
     return true;
