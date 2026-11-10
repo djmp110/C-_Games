@@ -107,8 +107,7 @@ int Board::game()
         }
         std::cout << "Play again? (y/n): ";
         std::string answer;
-        if (!std::getline(std::cin, answer))
-            return 0;
+        std::cin >> answer;
         if (answer == "y" || answer == "Y")
         {
             choose_first_player(player_one, player_two);
