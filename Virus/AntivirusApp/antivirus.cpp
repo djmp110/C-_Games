@@ -1,9 +1,8 @@
 #include "common.h"
 #include <fstream>
 #include <iostream>
-
-static const wchar_t* VAULT_NAME    = L"VirusHiddenFiles";
-static const wchar_t* MANIFEST_NAME = L"manifest.dat";
+#include <iomanip>
+#include <sstream>
 
 int main(int argc, char** argv) {
     fs::path target = (argc > 1) ? fs::path(argv[1]) : selfDirectory();
@@ -16,7 +15,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    unhidePath(vault);                      // make it visible again
+    vault = unhideFile(vault);
 
     fs::path manifestPath = vault / MANIFEST_NAME;
     if (!fs::exists(manifestPath)) {
@@ -32,11 +31,13 @@ int main(int argc, char** argv) {
     while (std::getline(manifest, line)) {
         if (line.empty()) continue;
 
-        auto sep = line.find('|');
-        if (sep == std::string::npos) { ++failed; continue; }
+        std::istringstream entry(line);
+        std::string originalName;
+        std::string storedName;
+        if (!(entry >> std::quoted(originalName) >> std::quoted(storedName))) { ++failed; continue; }
 
-        fs::path original = fs::path(line.substr(0, sep));
-        fs::path stored   = vault / line.substr(sep + 1);
+        fs::path original = fs::path(originalName);
+        fs::path stored   = vault / storedName;
 
         if (!fs::exists(stored, ec)) {
             std::cerr << "[antivirus] payload missing for "
@@ -45,7 +46,7 @@ int main(int argc, char** argv) {
             continue;
         }
 
-        unhidePath(stored);
+        stored = unhideFile(stored);
 
         // Rebuild any subfolders that no longer exist.
         fs::create_directories(original.parent_path(), ec);
